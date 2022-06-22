@@ -1,0 +1,5 @@
+[user]
+	email = jeffrey_uwenor@yahoo.com
+	name = jeffrey
+[core]
+	excludesfile = /root/.gitignore_global
