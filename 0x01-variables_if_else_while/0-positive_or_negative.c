@@ -1,15 +1,17 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
-/* positive or negative */
-
-/* betty style doc for function main goes there */
+/**
+* positive or negative
+*
+* Return: 0 if success
+*/
 int main(void)
 {
-	int n;
+int n;
 
-	srand(time(0));
-	n = rand() - RAND_MAX / 2;
+srand(time(0));
+n = rand() - RAND_MAX / 2;
 				
 if (n < 0)
 {
