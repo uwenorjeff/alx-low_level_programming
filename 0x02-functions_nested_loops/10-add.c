@@ -12,7 +12,3 @@ int add(int i, int j)
 {
 return (i + j);
 }
-}
-_putchar('\n');
-}
-}
