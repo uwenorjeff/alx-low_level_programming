@@ -1,4 +1,4 @@
-include "main.h"
+#include "main.h"
 
 /**
  * _pow_recursion - raises x to the power of y
@@ -6,6 +6,7 @@ include "main.h"
  * @y: Power
  * Return: On success 1.
  */
+
 int _pow_recursion(int x, int y)
 {
 if (y < 0)
