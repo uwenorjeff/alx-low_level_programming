@@ -3,47 +3,19 @@
 #include <stdlib.h>
 
 /**
- * argstostr - concatenates all the arguments of your program
- * @ac: number of arguments
- * @av: arguments
- * Return: a pointer to a new string
+ * free_grid - Entry point
+ * @grid: rows of matrix
+ * @height: columns of string
+ * Return: a pointer to a 2 dimensional array of integers or null
  */
-
-char *argstostr(int ac, char **av)
-
+void free_grid(int **grid, int height)
 {
 int i;
-int j;
-char *p = NULL;
-int k;
-int ext;
-
-k = 0;
-
-ext = 0;
-if (ac == 0 || av == NULL)
-return (NULL);
-for (i = 0; i < ac; i++)
-
+int *p;
+for (i = 0; i < height; i++)
 {
-for (j = 0; av[i][j] != '\0'; j++)
-{
-ext++;
+p = grid[i];
+free(p);
 }
-}
-p = (char *)malloc(ext + ac + 1 * sizeof(char));
-if (p == NULL)
-return (NULL);
-for (i = 0; i < ac; i++)
-{
-for (j = 0; av[i][j] != '\0'; j++)
-{
-p[k] = av[i][j];
-k++;
-}
-p[k] = '\n';
-k++;
-}
-p[k] = '\0';
-return (p);
+free(grid);
 }
