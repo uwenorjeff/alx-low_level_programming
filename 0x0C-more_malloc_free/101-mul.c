@@ -115,7 +115,7 @@ if (*mul < '0' || *mul > '9')
 printf("Error\n");
 exit(98);
 }
-num = (*mul - '0') * digit;
+num = (*mul- '0') * digit;
 num += tens;
 *prod = (num % 10) + '0';
 tens = num / 10;
