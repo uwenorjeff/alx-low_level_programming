@@ -230,7 +230,7 @@ while (address_size && !*(--buffer))
 --address_size;
 printf("%x", *buffer & 0xff);
 while (--address_size > 0)
-printf("%02x", *(--buffer) & 0xff);
+printf("%02x", *(--buffer) &0xff);
 }
 printf("\n");
 }
@@ -244,7 +244,8 @@ int main(int argc, const char *argv[])
 {
 unsigned char buffer[18];
 unsigned int bit_mode;
-int big_endian;	int fd;
+int big_endian;
+int fd;
 if (argc != 2)
 {
 write(STDERR_FILENO, "Usage: elf_header elf_filename\n", 31);
