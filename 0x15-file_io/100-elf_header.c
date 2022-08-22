@@ -3,7 +3,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h> 
+#include <unistd.h>
 
 /**
  * _strncmp - compare two strings
@@ -35,7 +35,8 @@ return (0);
  * @fd: the file descriptor to clos
  */
 
-void _close(int fd){
+void _close(int fd)
+{
 if (close(fd) != -1)
 return;
 write(STDERR_FILENO, "Error: Can't close fd\n", 22);
@@ -81,7 +82,8 @@ printf("%02x%c", buffer[i], i < 15 ? ' ' : '\n');
  * @buffer: the ELF header
  * Return: bit mode (32 or 64)
  */
-size_t elf_class(const unsigned char *buffer){
+size_t elf_class(const unsigned char *buffer)
+{
 printf(" %-34s ", "Class:");
 if (buffer[EI_CLASS] == ELFCLASS64)
 {
@@ -179,7 +181,7 @@ printf(" %-34s %u\n", "ABI Version:", buffer[EI_ABIVERSION]);
  */
 void elf_type(const unsigned char *buffer, int big_endian)
 {
-char *type_table[5] = {	
+char *type_table[5] = {
 "NONE (No file type)",
 "REL (Relocatable file)",
 "EXEC (Executable file)",
@@ -202,5 +204,69 @@ else
 printf("<unknown: %x>\n", type);
 }
 /**
- * elf_entry - print entry point address * @buffer: string containing the entry point address * @bit_mode: bit mode (32 or 64) * @big_endian: endianness (big endian if non-zero) */void elf_entry(const unsigned char *buffer, size_t bit_mode, int big_endian){	int address_size = bit_mode / 8; 	printf(" %-34s 0x", "Entry point address:"); 	if (big_endian)	{		while (address_size && !*(buffer))			--address_size, ++buffer; 		printf("%x", *buffer & 0xff); 		while (--address_size > 0)			printf("%02x", *(++buffer) & 0xff);	}	else	{		buffer += address_size; 		while (address_size && !*(--buffer))			--address_size; 		printf("%x", *buffer & 0xff); 		while (--address_size > 0)			printf("%02x", *(--buffer) & 0xff);	} 	printf("\n");} /** * main - copy a file's contents to another file * @argc: the argument count * @argv: the argument values * * Return: Always 0 */int main(int argc, const char *argv[]){	unsigned char buffer[18];	unsigned int bit_mode;	int big_endian;	int fd; 	if (argc != 2)	{		write(STDERR_FILENO, "Usage: elf_header elf_filename\n", 31);		exit(98);	} 	fd = open(argv[1], O_RDONLY);	if (fd == -1)	{		write(STDERR_FILENO, "Error: Can't read from file\n", 28);		exit(98);	} 	_read(fd, (char *) buffer, 18); 	elf_magic(buffer);	bit_mode = elf_class(buffer);	big_endian = elf_data(buffer);	elf_version(buffer);	elf_osabi(buffer);	elf_abivers(buffer);	elf_type(buffer, big_endian); 	lseek(fd, 24, SEEK_SET);	_read(fd, (char *) buffer, bit_mode / 8); 	elf_entry(buffer, bit_mode, big_endian); 	_close(fd);
-	return (0);}
+ * elf_entry - print entry point address
+ * @buffer: string containing the entry point address
+ * @bit_mode: bit mode (32 or 64)
+ * @big_endian: endianness (big endian if non-zero)
+ *
+ */
+
+void elf_entry(const unsigned char *buffer, size_t bit_mode, int big_endian)
+{
+int address_size = bit_mode / 8;
+printf(" %-34s 0x", "Entry point address:");
+if (big_endian)
+{
+while (address_size && !*(buffer))
+--address_size, ++buffer;
+printf("%x", *buffer & 0xff);
+while (--address_size > 0)
+printf("%02x", *(++buffer) & 0xff);
+}
+else
+{
+buffer += address_size;
+while (address_size && !*(--buffer))
+--address_size;
+printf("%x", *buffer & 0xff);
+while (--address_size > 0)
+printf("%02x", *(--buffer) & 0xff);
+}
+printf("\n");
+}
+/**
+ * main - copy a file's contents to another file
+ * @argc: the argument count
+ * @argv: the argument values
+ * Return: Always 0
+ */
+int main(int argc, const char *argv[])
+{
+unsigned char buffer[18];
+unsigned int bit_mode;
+int big_endian;	int fd;
+if (argc != 2)
+{
+write(STDERR_FILENO, "Usage: elf_header elf_filename\n", 31);
+exit(98);
+}
+fd = open(argv[1], O_RDONLY);
+if (fd == -1)
+{
+write(STDERR_FILENO, "Error: Can't read from file\n", 28);
+exit(98);
+}
+_read(fd, (char *) buffer, 18);
+elf_magic(buffer);
+bit_mode = elf_class(buffer);
+big_endian = elf_data(buffer);
+elf_version(buffer);
+elf_osabi(buffer);
+elf_abivers(buffer);
+elf_type(buffer, big_endian);
+lseek(fd, 24, SEEK_SET);
+_read(fd, (char *) buffer, bit_mode / 8);
+elf_entry(buffer, bit_mode, big_endian);
+_close(fd);
+return (0);
+}
