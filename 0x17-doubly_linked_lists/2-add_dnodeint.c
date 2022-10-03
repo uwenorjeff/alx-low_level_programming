@@ -24,3 +24,4 @@ new->next = *head;
 if (new->next != NULL)
 (new->next)->prev = new;
 return (new);
+}
