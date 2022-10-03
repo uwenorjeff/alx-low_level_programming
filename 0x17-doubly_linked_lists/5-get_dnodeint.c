@@ -18,5 +18,5 @@ return (NULL);
 head = head->next;
 counter++;
 }
-return
+return (head);
 }
